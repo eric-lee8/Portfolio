@@ -273,193 +273,208 @@ const projects = [
   },
 ]
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = projects.find((p) => p.slug === params.slug)
+import Header from "../../components/header"
+
+// ... imports remain the same
+
+// ... projects array remains the same
+
+export function generateStaticParams() {
+  return projects.map((project) => ({
+    slug: project.slug,
+  }))
+}
+
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const project = projects.find((p) => p.slug === slug)
 
   if (!project) {
     notFound()
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-      <nav className="mb-12">
-        <ul className="flex justify-center space-x-6">
-          {projects.map((p) => (
-            <li key={p.id}>
-              <Link
-                href={`/projects/${p.slug}`}
-                className={`text-base font-medium ${
-                  p.slug === params.slug
+    <div className="min-h-screen bg-white">
+      <Header />
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <nav className="mb-12 border-b border-gray-200 pb-8">
+          <ul className="flex flex-wrap justify-center gap-6">
+            {projects.map((p) => (
+              <li key={p.id}>
+                <Link
+                  href={`/projects/${p.slug}`}
+                  className={`text-base font-medium ${p.slug === slug
                     ? "text-indigo-600 border-b-2 border-indigo-600"
                     : "text-gray-500 hover:text-gray-900"
-                }`}
-              >
-                {p.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-          {project.title}
-        </h1>
-        <p className="mt-4 text-xl text-indigo-600">{project.subheading}</p>
-        <p className="mt-4 text-xl text-gray-500">{project.description}</p>
-        <p className="mt-2 text-lg font-medium text-gray-600">Client: {project.client}</p>
-        <div className="mt-4">
-          <p className="text-md text-gray-600">{project.timeline}</p>
-          <p className="text-md text-gray-600">{project.team}</p>
-        </div>
-        <div className="mt-6">
-          <h3 className="text-lg font-medium text-gray-900">Results:</h3>
-          <ul className="mt-2 list-disc list-inside text-md text-gray-600">
-            {project.results.map((result, index) => (
-              <li key={index}>{result}</li>
+                    }`}
+                >
+                  {p.title}
+                </Link>
+              </li>
             ))}
           </ul>
+        </nav>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+            {project.title}
+          </h1>
+          <p className="mt-4 text-xl text-indigo-600">{project.subheading}</p>
+          <p className="mt-4 text-xl text-gray-500">{project.description}</p>
+          <p className="mt-2 text-lg font-medium text-gray-600">Client: {project.client}</p>
+          <div className="mt-4">
+            <p className="text-md text-gray-600">{project.timeline}</p>
+            <p className="text-md text-gray-600">{project.team}</p>
+          </div>
+          <div className="mt-6">
+            <h3 className="text-lg font-medium text-gray-900">Results:</h3>
+            <ul className="mt-2 list-disc list-inside text-md text-gray-600">
+              {project.results.map((result, index) => (
+                <li key={index}>{result}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
 
-      {project.slug === "volunteer-matching-platform-research" && (
-        <div className="mt-16 space-y-12">
-          <section className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Research Approach & Methods</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Participants</h3>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>11 volunteers</li>
-                  <li>10 nonprofit representatives</li>
-                  <li>5 corporate representatives</li>
-                </ul>
+        {project.slug === "volunteer-matching-platform-research" && (
+          <div className="mt-16 space-y-12">
+            <section className="bg-white shadow-lg rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Research Approach & Methods</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Participants</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>11 volunteers</li>
+                    <li>10 nonprofit representatives</li>
+                    <li>5 corporate representatives</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Methods</h3>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <CheckCircle className="text-green-500 mr-2" size={20} />
+                      <span>Usability Testing (Moderated Sessions)</span>
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="text-green-500 mr-2" size={20} />
+                      <span>Task-Based Scenarios</span>
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="text-green-500 mr-2" size={20} />
+                      <span>Think-Aloud Protocol</span>
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="text-green-500 mr-2" size={20} />
+                      <span>Navigation Testing</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Methods</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <CheckCircle className="text-green-500 mr-2" size={20} />
-                    <span>Usability Testing (Moderated Sessions)</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="text-green-500 mr-2" size={20} />
-                    <span>Task-Based Scenarios</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="text-green-500 mr-2" size={20} />
-                    <span>Think-Aloud Protocol</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="text-green-500 mr-2" size={20} />
-                    <span>Navigation Testing</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Key Findings & Usability Challenges</h2>
-            <div className="space-y-6">
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">General Navigation Issues</h3>
-                <div className="flex items-start mb-2">
-                  <AlertTriangle className="text-yellow-500 mr-2 mt-1" size={20} />
-                  <p>Users struggled to locate key features due to a lack of clear navigation cues.</p>
-                </div>
-                <p className="mb-2">
-                  <strong>Recommendation:</strong> Implement a persistent navigation menu with clearer labels & visual
-                  hierarchy.
-                </p>
-              </div>
-              <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Volunteer Experience</h3>
-                <div className="flex items-start mb-2">
-                  <AlertTriangle className="text-yellow-500 mr-2 mt-1" size={20} />
-                  <p>Volunteers had difficulty searching for relevant opportunities and tracking past contributions.</p>
-                </div>
-                <p className="mb-2">
-                  <strong>Recommendation:</strong> Introduce filters for more precise searching and create a dashboard
-                  summary for quick access to past activities and impact.
-                </p>
-              </div>
-              <div className="bg-green-50 border-l-4 border-green-400 p-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Nonprofit Experience</h3>
-                <div className="flex items-start mb-2">
-                  <AlertTriangle className="text-yellow-500 mr-2 mt-1" size={20} />
-                  <p>
-                    Nonprofits found the opportunity creation form overwhelming and had difficulty tracking volunteer
-                    progress.
+            <section className="bg-white shadow-lg rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Key Findings & Usability Challenges</h2>
+              <div className="space-y-6">
+                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">General Navigation Issues</h3>
+                  <div className="flex items-start mb-2">
+                    <AlertTriangle className="text-yellow-500 mr-2 mt-1" size={20} />
+                    <p>Users struggled to locate key features due to a lack of clear navigation cues.</p>
+                  </div>
+                  <p className="mb-2">
+                    <strong>Recommendation:</strong> Implement a persistent navigation menu with clearer labels & visual
+                    hierarchy.
                   </p>
                 </div>
-                <p className="mb-2">
-                  <strong>Recommendation:</strong> Streamline form completion with progressive disclosure and introduce
-                  a "Manage Volunteers" tab with progress tracking at-a-glance.
-                </p>
+                <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Volunteer Experience</h3>
+                  <div className="flex items-start mb-2">
+                    <AlertTriangle className="text-yellow-500 mr-2 mt-1" size={20} />
+                    <p>Volunteers had difficulty searching for relevant opportunities and tracking past contributions.</p>
+                  </div>
+                  <p className="mb-2">
+                    <strong>Recommendation:</strong> Introduce filters for more precise searching and create a dashboard
+                    summary for quick access to past activities and impact.
+                  </p>
+                </div>
+                <div className="bg-green-50 border-l-4 border-green-400 p-4">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Nonprofit Experience</h3>
+                  <div className="flex items-start mb-2">
+                    <AlertTriangle className="text-yellow-500 mr-2 mt-1" size={20} />
+                    <p>
+                      Nonprofits found the opportunity creation form overwhelming and had difficulty tracking volunteer
+                      progress.
+                    </p>
+                  </div>
+                  <p className="mb-2">
+                    <strong>Recommendation:</strong> Streamline form completion with progressive disclosure and introduce
+                    a "Manage Volunteers" tab with progress tracking at-a-glance.
+                  </p>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Impact on Product Development</h2>
-            <ul className="space-y-2">
-              <li className="flex items-center">
-                <CheckCircle className="text-green-500 mr-2" size={20} />
-                <span>Streamlined platform navigation with a sticky nav bar</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="text-green-500 mr-2" size={20} />
-                <span>Enhanced search & filtering capabilities</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="text-green-500 mr-2" size={20} />
-                <span>Improved volunteer history tracking with a dashboard</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="text-green-500 mr-2" size={20} />
-                <span>Refined nonprofit tools for opportunity creation and volunteer management</span>
-              </li>
-            </ul>
-          </section>
+            <section className="bg-white shadow-lg rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Impact on Product Development</h2>
+              <ul className="space-y-2">
+                <li className="flex items-center">
+                  <CheckCircle className="text-green-500 mr-2" size={20} />
+                  <span>Streamlined platform navigation with a sticky nav bar</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="text-green-500 mr-2" size={20} />
+                  <span>Enhanced search & filtering capabilities</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="text-green-500 mr-2" size={20} />
+                  <span>Improved volunteer history tracking with a dashboard</span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="text-green-500 mr-2" size={20} />
+                  <span>Refined nonprofit tools for opportunity creation and volunteer management</span>
+                </li>
+              </ul>
+            </section>
 
-          <section className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Lessons Learned & Next Steps</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Key Takeaways</h3>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>Early usability testing is essential</li>
-                  <li>Navigation & information hierarchy must be crystal clear</li>
-                  <li>Stakeholder involvement is crucial</li>
-                </ul>
+            <section className="bg-white shadow-lg rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Lessons Learned & Next Steps</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Key Takeaways</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Early usability testing is essential</li>
+                    <li>Navigation & information hierarchy must be crystal clear</li>
+                    <li>Stakeholder involvement is crucial</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Next Steps</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Conduct A/B testing on the volunteer opportunity search</li>
+                    <li>Monitor engagement metrics post-launch</li>
+                    <li>Continue iterating based on user feedback</li>
+                  </ul>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Next Steps</h3>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>Conduct A/B testing on the volunteer opportunity search</li>
-                  <li>Monitor engagement metrics post-launch</li>
-                  <li>Continue iterating based on user feedback</li>
-                </ul>
+            </section>
+          </div>
+        )}
+
+        {project.caseStudyImages && (
+          <div className="mt-16 space-y-8">
+            {project.caseStudyImages.map((image, index) => (
+              <div key={index} className="relative w-full">
+                <img src={image.src || "/placeholder.svg"} alt={image.alt} className="w-full rounded-lg shadow-lg" />
               </div>
-            </div>
-          </section>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-8 text-center">
+          <Link href="/" className="text-base font-medium text-indigo-600 hover:text-indigo-500">
+            ← Back to Home
+          </Link>
         </div>
-      )}
-
-      {project.caseStudyImages && (
-        <div className="mt-16 space-y-8">
-          {project.caseStudyImages.map((image, index) => (
-            <div key={index} className="relative w-full">
-              <img src={image.src || "/placeholder.svg"} alt={image.alt} className="w-full rounded-lg shadow-lg" />
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="mt-8 text-center">
-        <Link href="/" className="text-base font-medium text-indigo-600 hover:text-indigo-500">
-          ← Back to Home
-        </Link>
       </div>
     </div>
   )
